@@ -1,0 +1,73 @@
+import os
+class library():
+    def __init__(self):
+        self.books=[]
+        
+    def bookad(self):
+        bookname=input("Kitap başlığını giriniz:")
+        author=input("Yazar isimini giriniz:")
+        reldate=input("Yayınlanma tarihini giriniz:")
+        numpage=int(input("Sayfa sayısını giriniz:"))
+        adlist=f"Kitap:{bookname},Yazar:{author}\n"
+        self.books.append(adlist)
+        with open("books.txt", "a+") as file:
+                file.write(adlist)
+                
+                
+    def bookdel(self):  
+        del_title = input("Silmek istediğiniz kitabın başlığını girin: ")
+        with open("books.txt", "r+") as file:
+            books = file.readlines()
+
+            del_indices = []
+            for i, book in enumerate(books):
+                if del_title in book:
+                    del_indices.append(i)
+
+            if not del_indices:
+                print("Kitap bulunamadı.")
+                return
+            del_indices.reverse()
+            for del_index in del_indices:
+                del books[del_index]
+            file.seek(0)
+            file.truncate()
+            file.writelines(books)
+
+            print("Silme işlemi başarılı")
+
+
+    def booklist(self):
+         with open("books.txt","a") as file:
+            if os.path.getsize("books.txt")==0:
+                print("Hiçbir kitap eklenmemiş")
+            else:
+                with open("books.txt","r") as file:
+                    books=file.read()
+                lines=books.splitlines()
+                for line in lines:
+                    print(line)
+            
+library=library()
+
+
+while True:
+    print("***MENU***\n")
+    print("1)Kitap Listesi")
+    print("2)Kitap Ekleme")
+    print("3)Kitap Silme")
+    print("4)Çıkış")
+    choice=input("(1/2/3/4):")
+    
+    if choice=="1":
+        library.booklist()   
+    elif choice=="2":
+        library.bookad()
+    elif choice=="3":
+        library.bookdel()
+    elif choice=="4":
+        print("Çıkılıyor...")
+        break
+    else:
+        print(" Hata 1-4 arasında bir sayı girin")
+        
